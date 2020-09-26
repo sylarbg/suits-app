@@ -1,8 +1,27 @@
 <template>
-  <v-app id="inspire">
-    <v-app-bar app color="indigo" dense dark>
-        <v-toolbar-title>Suits &amp; Co</v-toolbar-title>
-        <v-spacer></v-spacer>                 
-    </v-app-bar>
+  <v-app id="inspire">        
+    <navigation></navigation>
+    <v-main>
+      <notifications></notifications>      
+      <router-view />     
+    </v-main>
+    <v-footer
+      color="indigo"
+      app
+    >
+      <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
+    </v-footer>
   </v-app>
 </template>
+
+<script>
+import Navigation from '@/components/Navigation';
+import Notifications from '@/components/Notifications';
+
+export default {
+  components: {
+    Navigation,
+    Notifications
+  }
+}
+</script>

@@ -1,10 +1,25 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../views/Home'
+import Login from '@/views/Auth/Login';
+import Register from '@/views/Auth/Register';
+import User from "@/api/User";
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {guestOnly: true}
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: {guestOnly: true}
+  },  
   {
     path: '/',
     name: 'Home',
@@ -25,5 +40,35 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.authOnly)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!User.isLoggedIn()) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.guestOnly)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (User.isLoggedIn()) {
+      next({
+        path: '/',        
+      })
+    } else {
+      next()
+    }
+  }
+  else {
+    next() // make sure to always call next()!
+  }
+})
+
 
 export default router
