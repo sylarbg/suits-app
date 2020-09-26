@@ -9,7 +9,10 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <LawyersAutocomplete :rules="[rules.required]" :lawyer.sync="lawyer" />
+                <div v-if="selectedLawyer" >
+                  Laywer : {{ selectedLawyer.name }}
+                </div>
+                <LawyersAutocomplete v-else :rules="[rules.required]" :lawyer.sync="lawyer" />
               </v-col>
               <v-col cols="12">
                 <DatePicker :rules="[rules.required]" :datetime.sync="datetime"></DatePicker>
@@ -32,8 +35,8 @@
   import LawyersAutocomplete from '@/components/LawyersAutocomplete';
   import Rules from '@/mixins/Rules'
   import ErrorsBag from "@/mixins/ErrorsBag";
-  import Appointment from '@/api/Appointment';
-  import { EventBus } from '@/services/EventBus';
+  // import Appointment from '@/api/Appointment';
+  //import { EventBus } from '@/services/EventBus';
 
   export default {
     components: {
@@ -41,30 +44,46 @@
       LawyersAutocomplete
     },
     mixins: [ErrorsBag, Rules],
-    props: ['dialog'],
+    props: ['dialog', 'selectedLawyer'],
     data() {
       return {
         lawyer: null,
         datetime: null,
       }
-    },
+    }, 
+    watch: {
+        selectedLawyer: function(newValue, ) {
+            if (newValue === null) {
+                this.value = null;
+            }
+
+            if (typeof newValue == 'object') {
+                this.lawyer = newValue.id;
+            }
+        },
+        },   
     methods: {
       submit() {
         if (!this.$refs.form.validate()) {
           return;
         }
 
-        Appointment.post(this.lawyer, {datetime: this.datetime});
-      
-        this.close();
-         
-        EventBus.$emit('notification', {
-            text: 'Your request was submitted'
+        this.$emit('submit', {
+            lawyer: this.lawyer,
+            datetime: this.datetime
         });
+      return;
 
-        this.$router.push({
-          name: "Appointments"
-        });
+        // Appointment.post(this.lawyer, {datetime: this.datetime});      
+        // this.close();
+         
+        // EventBus.$emit('notification', {
+        //     text: 'Your request was submitted'
+        // });
+
+        // this.$router.push({
+        //   name: "Appointments"
+        // });
       },
       close() {
         this.$refs.form.reset();

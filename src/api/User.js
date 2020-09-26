@@ -10,8 +10,17 @@ export default {
                 return null;
             }
             this.user = JSON.parse(data);
-            return this.user;
+            
+            this.user["isLawyer"] = function () {
+                return this.type.id == 2
+            };
+                    
+            this.user["canRescheduleRejectedAppointment"] = function () {                
+                return !this["isLawyer"]();
+            }
+
        }
+       return this.user
    }, 
    async logout() {    
         await Auth.logout();

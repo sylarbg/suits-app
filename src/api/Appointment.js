@@ -17,4 +17,11 @@ export default {
             meta: result['data']['meta']
         };
     },
+    async reschedule(lawyerId, appointmentId, params) {
+        const result = await HttpClient.put(`/api/lawyers/${lawyerId}/appointments/${appointmentId}/reschedule`, params);
+        return {
+            data: result['data']['data'],
+            meta: result['data']['meta']
+        };
+    },
 }
