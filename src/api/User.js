@@ -17,6 +17,7 @@ export default {
         await Auth.logout();
         localStorage.removeItem("auth");
         localStorage.removeItem("user");
+        this.user = null;
         EventBus.$emit('auth:logout');
     },
     isLoggedIn() {

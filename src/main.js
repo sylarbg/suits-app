@@ -4,6 +4,9 @@ import router from './router'
 import vuetify from '@/plugins/vuetify'
 import User from '@/api/User'
 import { EventBus } from '@/services/EventBus'
+import DatetimePicker from 'vuetify-datetime-picker'
+
+Vue.use(DatetimePicker);
 
 Vue.config.productionTip = false
 
@@ -27,17 +30,7 @@ new Vue({
     EventBus.$on('auth:login', ({user})  => {
       this.isLogged = true;
       this.user = user;
-    });
-    // this.$on('notification', ({text, status}) => {
-    //     this.notification.text = text;
-    //     this.notification.show = true;
-    //     this.notification.status = status || 'success';        
-    // });
-    // this.$on('notification:close', () => {
-    //   this.notification.text = '';
-    //   this.notification.show = false;
-    //   this.notification.status = 'success'; 
-    // })
+    }); 
   },
   render: h => h(App)
 }).$mount('#app')
