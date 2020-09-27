@@ -14,7 +14,7 @@
                                 <v-select @change="performSearch"
                                     :items='[ {text: "Name (A-Z)", value: "name" }, {text: "Name (Z-A)", value: "-name" }  ]'
                                     item-text="text" v-model="order" item-select="value" prepend-icon="mdi-sort"
-                                    label="Type">
+                                    label="Order by">
                                 </v-select>
                             </v-col>
                         </v-row>

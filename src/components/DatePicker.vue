@@ -1,6 +1,8 @@
 <template>
-    <v-datetime-picker :text-field-props="{rules}" label="Select Datetime"
-        :date-picker-props="{min: new Date().toISOString() }" @input="input"
+    <v-datetime-picker :text-field-props="{
+        rules,
+        'error-messages': errors
+        }" label="Select Datetime" :date-picker-props="{min: new Date().toISOString() }" @input="input"
         :time-picker-props="{ format: '24hr','allowed-minutes' : []}" time-format="HH:mm" v-model="model">
         <template slot="dateIcon">
             <v-icon>mdi-calendar</v-icon>
@@ -13,10 +15,15 @@
 
 <script>
     export default {
-        props: ['datetime', 'rules'],
+        props: ['datetime', 'rules', 'errors'],
         data() {
             return {
                 model: this.datetime
+            }
+        },
+        watch: {
+            datetime: function (newvalue) {
+                this.model = newvalue
             }
         },
         methods: {

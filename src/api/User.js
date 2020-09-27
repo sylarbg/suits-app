@@ -11,14 +11,10 @@ export default {
             }
             this.user = JSON.parse(data);
             
+            // todo remove magic number
             this.user["isLawyer"] = function () {
                 return this.type.id == 2
-            };
-                    
-            this.user["canRescheduleRejectedAppointment"] = function () {                
-                return !this["isLawyer"]();
-            }
-
+            };                           
        }
        return this.user
    }, 

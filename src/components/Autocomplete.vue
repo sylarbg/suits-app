@@ -1,16 +1,15 @@
 <template>
-  <v-autocomplete :rules="rules" v-model="model" @change="select" :items="items" :loading="isLoading" :search-input.sync="search" color="white"
-    hide-no-data hide-selected item-text="text" item-value="value" label="Lawyers" placeholder="Start typing to Search">
+  <v-autocomplete :error-messages ="errors" :rules="rules" v-model="model" @change="select" :items="items" :loading="isLoading" :search-input.sync="search" color="white"
+    hide-no-data hide-selected item-text="text" :label="label" item-value="value" placeholder="Start typing to Search">
   </v-autocomplete>
 </template>
 
 <script>
-  import Lawyer from '@/api/Lawyer';
   export default {
-    props: ['lawyer', 'rules'],
+    props: ['user', 'rules', 'errors', 'source', 'label'],
     data() {
       return {
-        model: this.lawyer,
+        model: this.user,
         isLoading: false,
         search: null,
         entries: [],
@@ -18,7 +17,7 @@
     },
     methods: {
       select() {
-        this.$emit('update:lawyer', this.model)
+        this.$emit('update:user', this.model)
       }
     },
     computed: {
@@ -33,7 +32,7 @@
     },
     watch: {
       async search(val) {
-        this.entries = (await Lawyer.fetch({
+        this.entries = (await this.source.fetch({
           name: val
         })).data;
       },

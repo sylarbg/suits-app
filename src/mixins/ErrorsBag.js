@@ -59,6 +59,10 @@ class Errors {
         this.errors = errors;
     }
 
+    reset() {
+        this.errors = {};
+    }
+
     /**
      * Clear a specific field, object or all error fields.
      *

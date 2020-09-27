@@ -11,16 +11,22 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <div v-if="appointment.lawyer">
-                  Laywer : {{ appointment.lawyer.name }}
+                <div v-if="appointment.citizen">
+                  Citizen : {{ appointment.citizen.name }}
                 </div>
-                <Autocomplete v-else :rules="[rules.required]" label="Lawyer" :errors="firstError('lawyer')" :source="source"                
-                  :user.sync="lawyer" />
+                <Autocomplete label="Citizen" :source="source" v-else :rules="[rules.required]"
+                  :errors="firstError('lawyer')" :user.sync="user" />
               </v-col>
               <v-col cols="12">
                 <DatePicker :errors="firstError('datetime')" :rules="[rules.required]" :datetime.sync="datetime">
                 </DatePicker>
               </v-col>
+
+              <v-col cols="12">
+                <v-select v-model="status" :items="statuses" item-text="text" item-select="value" label="Status">
+                </v-select>
+              </v-col>
+
             </v-row>
           </v-container>
         </v-card-text>
@@ -40,7 +46,8 @@
   import Rules from '@/mixins/Rules'
   import ErrorsBag from "@/mixins/ErrorsBag";
   import Appointment from '@/api/Appointment';
-  import Lawyer from '@/api/Lawyer';
+  import Citizen from '@/api/Citizen';
+  import AppointmentStatuses from '@/services/AppointmentStatuses'
 
   import {
     EventBus
@@ -59,30 +66,42 @@
         default: function () {
           return {
             id: null,
-            lawyer: null
+            lawyer: null,
+            citizen: null,
           }
         }
       }
     },
+    computed: {
+      statuses() {
+        return Object.values(AppointmentStatuses)
+      }
+    },
     data() {
       return {
-        source: Lawyer,
-        lawyer: null,
+        status: null,
+        source: Citizen,
+        user: null,
         datetime: null,
       }
     },
     watch: {
-      appointment: function (newValue) {
-        if (newValue.id === null) {
-          this.datetime = null;
-          this.lawyer = null;
-        }
+      appointment: {
+        deep: true,
+        handler(newValue) {
+          if (newValue.id === null) {
+            this.datetime = null;
+            this.citizen = null;
+          }
 
-        if (newValue.id) {
-          this.datetime = new Date(newValue.scheduled_raw);
-          this.lawyer = newValue.lawyer.id;
+          if (newValue.id) {
+            this.datetime = new Date(newValue.scheduled_raw);
+            this.user = newValue.citizen.id;
+            this.status = newValue.status.id;
+          }
         }
       }
+
     },
     methods: {
       async submit() {
@@ -99,11 +118,13 @@
       },
       async create() {
         try {
-          await Appointment.post(this.lawyer, {            
-            datetime: this.datetime
+          await Appointment.post(this.$root.user.id, {
+            user_id: this.user,
+            datetime: this.datetime,
+            status: this.status,
           });
 
-          this.notify('Your request was submitted');
+          this.notify('Your appointment was created');
           this.close();
           EventBus.$emit('appointment:updated');
         } catch ({
@@ -114,8 +135,9 @@
       },
       async update() {
         try {
-          await Appointment.reschedule(this.appointment.lawyer.id, this.appointment.id, {
-            datetime: this.datetime
+          await Appointment.update(this.appointment.lawyer.id, this.appointment.id, {
+            datetime: this.datetime,
+            status: this.status,
           });
           EventBus.$emit('appointment:updated');
           this.notify('Your appointment was updated')
@@ -137,6 +159,7 @@
         });
       },
       close() {
+        this.datetime = null;
         this.$refs.form.reset();
         this.errors.reset();
         this.$emit('update:dialog', false)
