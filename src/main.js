@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import vuetify from '@/plugins/vuetify'
-import User from '@/api/User'
-import { EventBus } from '@/services/EventBus'
-import DatetimePicker from 'vuetify-datetime-picker'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import vuetify from '@/plugins/vuetify';
+import User from '@/api/User';
+import EventBus from '@/services/EventBus';
+import DatetimePicker from 'vuetify-datetime-picker';
 
 Vue.use(DatetimePicker);
 
@@ -21,7 +21,7 @@ new Vue({
       text: '',
       status: 'success',
     },    
-  },    
+  },
   created() {      
     EventBus.$on('auth:logout', () => {
       this.isLogged = false;

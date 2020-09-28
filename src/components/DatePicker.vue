@@ -3,6 +3,7 @@
         rules,
         'error-messages': errors
         }" label="Select Datetime" :date-picker-props="{min: new Date().toISOString() }" @input="input"
+       
         :time-picker-props="{ format: '24hr','allowed-minutes' : []}" time-format="HH:mm" v-model="model">
         <template slot="dateIcon">
             <v-icon>mdi-calendar</v-icon>
@@ -22,7 +23,7 @@
             }
         },
         watch: {
-            datetime: function (newvalue) {
+            datetime: function (newvalue) {                
                 this.model = newvalue
             }
         },

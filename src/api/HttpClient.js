@@ -2,8 +2,9 @@ import axios from "axios";
 import User from '@/api/User'
 
 let HttpClient = axios.create({
-  baseURL: "http://localhost"
+  baseURL: process.env.VUE_APP_API_URL
 });
+
 
 HttpClient.interceptors.response.use(undefined, (err) => {
   return new Promise(function () {   

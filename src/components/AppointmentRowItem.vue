@@ -8,11 +8,13 @@
                 Delete
             </v-btn>
 
-            <v-btn v-if="canRescheduleRejectedAppointment" depressed @click.prevent="$emit('action', {name: 'reschedule', 'appointment': appointment})">
+            <v-btn v-if="canRescheduleRejectedAppointment" depressed
+                @click.prevent="$emit('action', {name: 'reschedule', 'appointment': appointment})">
                 Reschedule
             </v-btn>
 
-            <v-btn v-if="$root.user.isLawyer()" depressed @click.prevent="$emit('action', {name: 'edit', 'appointment': appointment})">
+            <v-btn v-if="$root.user.isLawyer()" depressed
+                @click.prevent="$emit('action', {name: 'edit', 'appointment': appointment})">
                 Edit
             </v-btn>
         </td>
@@ -22,9 +24,8 @@
 <script>
     import Gate from '@/services/Gate';
     import Appointment from '@/api/Appointment';
-    import {
-        EventBus
-    } from '@/services/EventBus';
+    import EventBus from '@/services/EventBus';
+
     export default {
         props: ['appointment'],
         data() {
@@ -34,6 +35,9 @@
         },
         computed: {
             person() {
+                if (!this.$root.isLogged) {
+                    return '';
+                }
                 return this.$root.user.isLawyer() ? this.appointment.citizen.name : this.appointment.lawyer.name;
             },
             canDelete() {

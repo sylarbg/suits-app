@@ -41,17 +41,14 @@
 </template>
 
 <script>
-  import DatePicker from '@/components/DatePicker';
-  import Autocomplete from '@/components/Autocomplete';
   import Rules from '@/mixins/Rules'
+  import Citizen from '@/api/Citizen';
+  import EventBus from '@/services/EventBus';
   import ErrorsBag from "@/mixins/ErrorsBag";
   import Appointment from '@/api/Appointment';
-  import Citizen from '@/api/Citizen';
+  import DatePicker from '@/components/DatePicker';
+  import Autocomplete from '@/components/Autocomplete';
   import AppointmentStatuses from '@/services/AppointmentStatuses'
-
-  import {
-    EventBus
-  } from '@/services/EventBus';
 
   export default {
     components: {

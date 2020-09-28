@@ -41,12 +41,12 @@
 <script>
   import Auth from "@/api/Auth";
   import Rules from "@/mixins/Rules";
-  import ErrorsBag from "@/mixins/ErrorsBag";  
-  import { EventBus } from '@/services/EventBus';
+  import ErrorsBag from "@/mixins/ErrorsBag";
+  import EventBus from '@/services/EventBus';
 
   export default {
     name: 'Register',
-    mixins: [ErrorsBag, Rules],    
+    mixins: [ErrorsBag, Rules],
     data() {
       return {
         userTypes: [{
@@ -74,14 +74,14 @@
         }
         try {
           await Auth.register(this.form);
-          
+
           EventBus.$emit('notification', {
             text: 'You have successfully registered'
           });
 
           this.$router.push({
             name: "Login"
-          });          
+          });
         } catch ({
           response
         }) {

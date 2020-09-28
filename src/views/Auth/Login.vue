@@ -53,7 +53,7 @@
         try {
           await User.login(this.form)
           this.$router.push({
-            name: "Home"
+            name: "Lawyers"
           });
         } catch ({
           response

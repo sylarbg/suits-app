@@ -1,5 +1,5 @@
 import Auth from '@/api/Auth';
-import { EventBus } from '@/services/EventBus';
+import EventBus from '@/services/EventBus';
 
 export default { 
    user: null, 
@@ -33,6 +33,6 @@ export default {
         const user = (await Auth.login(data)).data.data;                            
         localStorage.setItem("auth", true);          
         localStorage.setItem("user",JSON.stringify(user));
-        EventBus.$emit('auth:login', {user});
+        EventBus.$emit('auth:login', {user: this.data()});
     }
 }

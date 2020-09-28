@@ -14,8 +14,8 @@
                 <div v-if="appointment.lawyer">
                   Laywer : {{ appointment.lawyer.name }}
                 </div>
-                <Autocomplete v-else :rules="[rules.required]" label="Lawyer" :errors="firstError('lawyer')" :source="source"                
-                  :user.sync="lawyer" />
+                <Autocomplete v-else :rules="[rules.required]" label="Lawyer" :errors="firstError('lawyer')"
+                  :source="source" :user.sync="lawyer" />
               </v-col>
               <v-col cols="12">
                 <DatePicker :errors="firstError('datetime')" :rules="[rules.required]" :datetime.sync="datetime">
@@ -35,16 +35,13 @@
 </template>
 
 <script>
-  import DatePicker from '@/components/DatePicker';
-  import Autocomplete from '@/components/Autocomplete';
-  import Rules from '@/mixins/Rules'
-  import ErrorsBag from "@/mixins/ErrorsBag";
-  import Appointment from '@/api/Appointment';
   import Lawyer from '@/api/Lawyer';
-
-  import {
-    EventBus
-  } from '@/services/EventBus';
+  import Rules from '@/mixins/Rules';  
+  import ErrorsBag from "@/mixins/ErrorsBag";  
+  import EventBus from '@/services/EventBus';
+  import Appointment from '@/api/Appointment';
+  import DatePicker from '@/components/DatePicker';  
+  import Autocomplete from '@/components/Autocomplete';
 
   export default {
     components: {
@@ -59,7 +56,8 @@
         default: function () {
           return {
             id: null,
-            lawyer: null
+            lawyer: null,
+            scheduled_raw: null,
           }
         }
       }
@@ -72,16 +70,12 @@
       }
     },
     watch: {
-      appointment: function (newValue) {
-        if (newValue.id === null) {
-          this.datetime = null;
-          this.lawyer = null;
-        }
-
-        if (newValue.id) {
-          this.datetime = new Date(newValue.scheduled_raw);
+      appointment: {
+        handler: function (newValue) {
+          this.datetime = newValue.scheduled_raw ? new Date(newValue.scheduled_raw) : null;
           this.lawyer = newValue.lawyer.id;
-        }
+        },
+        deep: true,
       }
     },
     methods: {
@@ -99,7 +93,8 @@
       },
       async create() {
         try {
-          await Appointment.post(this.lawyer, {            
+          console.log(this.lawyer)
+          await Appointment.post(this.lawyer, {
             datetime: this.datetime
           });
 

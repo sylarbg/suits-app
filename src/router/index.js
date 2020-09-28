@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home'
 import Login from '@/views/Auth/Login';
 import Register from '@/views/Auth/Register';
+import Logout from '@/views/Auth/Logout';
 import User from "@/api/User";
 
 Vue.use(VueRouter)
@@ -12,34 +12,26 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: {guestOnly: true}
+    meta: {guestOnly: true, title: "Login"}
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
+    meta: { title: "Logout"}
   },
   {
     path: '/register',
     name: 'Register',
     component: Register,
-    meta: {guestOnly: true}
-  },  
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
+    meta: {guestOnly: true,  title: "Register"}
+  },   
   {
     path: '/lawyers',
-    name: 'Lawyers',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Lawyers/Index')
+    name: 'Lawyers',    
+    component: () => import(/* webpackChunkName: "about" */ '@/views/Lawyers/Index'),
+    alias: '/',
+    meta: {title: "Lawyers"}
   },
   {
     path: '/appointments',
@@ -48,7 +40,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Appointments/Index.vue'),
-    meta: {authOnly: true}
+    meta: {authOnly: true,  title: 'Appointments',}
   }
 ]
 
@@ -87,5 +79,13 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+const DEFAULT_TITLE = 'Suits'
+router.afterEach((to) => {
+  // Use next tick to handle router history correctly
+  // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+  Vue.nextTick(() => {
+      document.title = to.meta.title || DEFAULT_TITLE;
+  });
+});
 
 export default router
