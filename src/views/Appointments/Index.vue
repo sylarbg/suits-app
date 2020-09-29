@@ -6,8 +6,8 @@
                     <v-container fluid>
                         <v-row>
                             <v-col cols="12" md="4">
-                                <v-text-field v-model="name" prepend-icon="mdi-account-search"
-                                    label="Search by name" @keyup.stop="performSearch"></v-text-field>
+                                <v-text-field v-model="name" prepend-icon="mdi-account-search" label="Search by name"
+                                    @keyup.stop="performSearch"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="4">
@@ -114,7 +114,8 @@
                     page: this.page,
                     name: this.name,
                     order: this.order,
-                    status: this.status,                    
+                    status: this.status,
+                    refresh : this.refresh
                 }
             },
             statuses() {
@@ -148,13 +149,15 @@
                     actions[name]()
                 }
             },
-            performSearch() {
-                this.page = 1;
-                this.refresh = new Date().getTime();
+            performSearch() {              
+                this.refresh = new Date().getTime()  
+                this.page = 1;                              
             },
         },
-        mounted() {            
-            EventBus.$on('appointment:updated', () => this.performSearch())
+        mounted() {
+            EventBus.$on('appointment:updated', () => {
+                this.performSearch();      
+            });
         }
     }
 </script>

@@ -73,7 +73,7 @@
       appointment: {
         handler: function (newValue) {
           this.datetime = newValue.scheduled_raw ? new Date(newValue.scheduled_raw) : null;
-          this.lawyer = newValue.lawyer.id;
+          this.lawyer = newValue.lawyer ? newValue.lawyer.id : null;
         },
         deep: true,
       }
@@ -93,14 +93,13 @@
       },
       async create() {
         try {
-          console.log(this.lawyer)
           await Appointment.post(this.lawyer, {
             datetime: this.datetime
           });
 
           this.notify('Your request was submitted');
           this.close();
-          EventBus.$emit('appointment:updated');
+          EventBus.$emit('appointment:updated');         
         } catch ({
           response
         }) {

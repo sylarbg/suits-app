@@ -11,11 +11,9 @@ export default {
         };
     },
     async post(id, params) {
-        const result = await HttpClient.post(`/api/lawyers/${id}/appointments`, params);
-        return {
-            data: result['data']['data'],
-            meta: result['data']['meta']
-        };
+        const result = (await HttpClient.post(`/api/lawyers/${id}/appointments`, params)).data;
+        return result['data']
+
     },
     async reschedule(lawyerId, appointmentId, params) {
          await HttpClient.put(`/api/lawyers/${lawyerId}/appointments/${appointmentId}/reschedule`, params);        

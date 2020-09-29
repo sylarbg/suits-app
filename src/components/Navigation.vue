@@ -44,8 +44,8 @@
 </template>
 
 <script>    
-    import BookAppointmentModal from '@/components/BookAppointmentModal'
-    import EditAppointmentModal from '@/components/EditAppointmentModal'
+    import BookAppointmentModal from '@/components/BookAppointmentModal';
+    import EditAppointmentModal from '@/components/EditAppointmentModal';
     export default {
         components: {
             BookAppointmentModal,
